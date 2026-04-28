@@ -6,69 +6,110 @@ public class AccountingLedgerApp {
 
     public static void main(String[] args) {
         ArrayList<Transaction> transactions = new ArrayList<>();
-        homePage(transactions);
-        addDeposit(transactions);
-        ledger(transactions);
 
+        while (true) {
+            {
+                System.out.print("""
+                        
+                        What do you want to do?
+                             1. Home
+                             2. Ledger
+                             0. Exit
+                         Make you selection:
+                        """);
 
-        {
-            System.out.print("""
-                    
-                    What do you want to do?
-                         1. Home
-                         2. Ledger
-                         0. Exit
-                     Make you selection:
-                    """);
+                String mainScreen = input.nextLine();
 
-            int mainScreen = input.nextInt();
+                switch (mainScreen) {
+                    case "1":
+                        homePage(transactions);
+                        break;
 
-            switch (mainScreen) {
-                case 1:
-                    homePage(transactions);
-                    break;
+                    case "2":
+                        ledger(transactions);
+                        break;
+                    case "0":
+                        System.exit(0);
 
-                case 2:
-                    ledger(transactions);
-                    break;
-                case 3:
-                    System.exit(0);
-
+                }
             }
         }
-         String choice = input.nextLine().toUpperCase();
     }
 
     public static void homePage(ArrayList<Transaction> transactions) {
-        System.out.print("""
-                Welcome to the HomeScreen
-                
-                Choose from the list:
-                
-                ▪ Add Deposit - (D)
-                ▪ P) Make Payment
-                ▪ L) Ledger
-                  M) Main Menu
-                ▪ X) Exit
-                """);
+       while(true) {
+           System.out.print("""
+                  
+                   ▪ Add Deposit - (D)
+                   ▪ P) Make Payment
+                   ▪ L) Ledger
+                   ▪ X) Exit
+                   
+                   What would you like to do today?
+                   """);
 
-        String choice = input.nextLine().toUpperCase();
+           String choice = input.nextLine().toUpperCase();
 
-        switch (choice){
-            case "D":
-                addDeposit(transactions);
-                break;
-            case "P":
-                break;
-            case "L":
-                ledger(transactions);
-
-
-
-
-        }
+           switch (choice) {
+               case "D":
+                   addDeposit(transactions);
+                   break;
+               case "P":
+                   makePayment(transactions);
+                   break;
+               case "L":
+                   ledger(transactions);
+                   break;
+               case "X":
+                   return;
 
 
+           }
+
+       }
+    }
+
+    public static void addDeposit(ArrayList<Transaction> transactions){
+        System.out.println("Please fill in the blank");
+
+        System.out.print("Enter date: ");
+        String date = input.nextLine();
+        System.out.print("Enter Description: ");
+        String describe = input.nextLine();
+        System.out.print("Enter amount: ");
+        double amount = input.nextDouble();
+        input.nextLine();
+        System.out.println(" ");
+        Transaction transact = new Transaction(date, describe, amount);
+
+        transactions.add(transact);
+        saveTransaction(transact);
+
+        System.out.println("We've received your Deposit!");
+        return;
+
+    }
+
+    public static void makePayment(ArrayList<Transaction> transactions){
+
+        System.out.println("Please fill in the blank");
+        System.out.println("[Make a Deposit]");
+
+        System.out.print("Enter date: ");
+        String date = input.nextLine();
+        System.out.print("Enter Description: ");
+        String describe = input.nextLine();
+        System.out.print("Enter amount: ");
+        double amount = input.nextDouble();
+        input.nextLine();
+        amount = -Math.abs(amount);
+        System.out.println(" ");
+        Transaction transact = new Transaction(date, describe, amount);
+
+        transactions.add(transact);
+        saveTransaction(transact);
+
+        System.out.println("We've received your Payment !");
     }
 
     public static void ledger(ArrayList<Transaction>transactions) {
@@ -91,21 +132,14 @@ public class AccountingLedgerApp {
                 """);
 
         int ledger = input.nextInt();
-
+        input.nextLine();
     }
+
     public static void loadTransaction(ArrayList<Transaction> transactions){
 
     }
-    public static void addDeposit(ArrayList<Transaction> transactions){
-        System.out.println("Enter date: ");
-        String date = input.nextLine();
-        System.out.println("Enter Description: ");
-        String describe = input.nextLine();
-        double amount = input.nextDouble();
 
-
-    }
-    public static void saveTransaction(ArrayList<Transaction> transactions){
+    public static void saveTransaction(Transaction transaction){
 
     }
 }
