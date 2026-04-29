@@ -2,6 +2,8 @@ import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.Locale;
 import java.util.Scanner;
 
 public class AccountingLedgerApp {
@@ -27,12 +29,13 @@ public class AccountingLedgerApp {
                     case "1":
                         homePage(transactions);
                         break;
-
                     case "2":
                         ledger(transactions);
                         break;
                     case "0":
                         System.exit(0);
+                    default:
+                        System.out.println("Invalid option. Please try again.");
 
                 }
             }
@@ -65,6 +68,8 @@ public class AccountingLedgerApp {
                     break;
                 case "X":
                     return;
+                default:
+                    System.out.println("Invalid option. Please try again.");
 
 
             }
@@ -86,6 +91,7 @@ public class AccountingLedgerApp {
         System.out.print("Enter amount: ");
         double amount = input.nextDouble();
         input.nextLine();
+        amount = Math.abs(amount);
         System.out.println(" ");
         Transaction transact = new Transaction(date, time, describe, vendor, amount);
 
@@ -93,7 +99,7 @@ public class AccountingLedgerApp {
         saveTransaction(transact);
 
         System.out.println("We've received your Deposit!");
-        return;
+
 
     }
 
@@ -145,6 +151,46 @@ public class AccountingLedgerApp {
         String ledger = input.nextLine();
     }
 
+    public static void listAll (ArrayList<Transaction> transactions){
+        System.out.println("Here you can see everything");
+
+    }
+
+    public static void listDeposits (ArrayList<Transaction> transactions){
+        System.out.println("List of the Deposits made");
+        System.out.println(" ");
+        System.out.println("\n====== DEPOSITS ======\n");
+
+        for(int i = transactions.size()-1; i > 0; i --)  {
+            Transaction transaction = transactions.get(i);
+
+            if (transaction.getAmount() > 0 ) {
+                System.out.println(transaction.getDate() + transaction.getTime() +
+                        transaction.getDescription() + transaction.getVendor() +
+                        transaction.getAmount());
+            }
+        }
+    }
+
+    public static void listPayments (ArrayList<Transaction> transactions) {
+        System.out.println("\n====== DEPOSITS ======\n");
+
+        for(int i = transactions.size()-1; i > 0; i --)  {
+            Transaction transaction = transactions.get(i);
+
+            if (transaction.getAmount() > 0 ) {
+                System.out.println(transaction.getDate() + transaction.getTime() +
+                        transaction.getDescription() + transaction.getVendor() +
+                        transaction.getAmount());
+            }
+        }
+
+    }
+
+    public static void listReports (ArrayList<Transaction> transactions){
+        System.out.println("List of the Reports");
+    }
+
     public static void loadTransaction(ArrayList<Transaction> transactions) {
 
     }
@@ -163,7 +209,12 @@ public class AccountingLedgerApp {
                            transaction.getAmount());
 
 
-           writeBuffer.close();
+           writeBuffer.newLine();
+
+
+       } catch (IOException e) {
+           System.out.println("pls try again" + e.getMessage());
+
        }
 
 }
