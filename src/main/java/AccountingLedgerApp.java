@@ -87,7 +87,7 @@ public class AccountingLedgerApp {
         double amount = input.nextDouble();
         input.nextLine();
         System.out.println(" ");
-        Transaction transact = new Transaction(date, time, amount);
+        Transaction transact = new Transaction(date, time, describe, vendor, amount);
 
         transactions.add(transact);
         saveTransaction(transact);
@@ -106,18 +106,18 @@ public class AccountingLedgerApp {
 
         System.out.print("Enter date: ");
         String date = input.nextLine();
-        System.out.println("Enter Time: ");
+        System.out.print("Enter Time: ");
         String time = input.nextLine();
         System.out.print("Enter Description: ");
         String describe = input.nextLine();
-        System.out.println("Vendor Name: ");
+        System.out.print("Vendor Name: ");
         String vendor = input.nextLine();
         System.out.print("Enter amount: ");
         double amount = input.nextDouble();
         input.nextLine();
         amount = -Math.abs(amount);
         System.out.println(" ");
-        Transaction transact = new Transaction(date, describe, amount);
+        Transaction transact = new Transaction(date, time, describe ,vendor, amount);
 
         transactions.add(transact);
         saveTransaction(transact);
@@ -151,20 +151,16 @@ public class AccountingLedgerApp {
 
     public static void saveTransaction(Transaction transaction) throws IOException {
        try (BufferedWriter writeBuffer = new BufferedWriter(new FileWriter
-               ("src/main/resources/transactions.csv"))){
-           writeBuffer.write("");
+               ("src/main/resources/transactions.csv",true))){
+
+           writeBuffer.write("date|time|description|vendor|amount|");
            writeBuffer.newLine();
-           writeBuffer.write("                           Transactions                                ");
-           writeBuffer.newLine();
-           writeBuffer.write("______________________________________________________________________");
-           writeBuffer.newLine();
-           writeBuffer.write(" ");
-           writeBuffer.newLine();
-           writeBuffer.write("date|description|amount");
-           writeBuffer.newLine();
-           writeBuffer.write(transaction.getDate()+  "|" +
-                   transaction.getDescription() + "|" +
-                   transaction.getAmount());
+           writeBuffer.write(
+                   transaction.getDate() + "|" +
+                           transaction.getTime() + "|" +
+                           transaction.getDescription() + "|" +
+                           transaction.getVendor() + "|" +
+                           transaction.getAmount());
 
 
            writeBuffer.close();
