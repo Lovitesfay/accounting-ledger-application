@@ -136,39 +136,40 @@ public class AccountingLedgerApp {
     }
 
     public static void ledgerScreen(ArrayList<Transaction> transactions) {
-        System.out.println("""
-                Ledger - All entries should show the newest entries first
-                o A) All
-                o D) Deposits
-                o P) Payments
-                o R) Reports
-                """);
+        while (true) {
+            System.out.println("""
+                    Ledger - All entries should show the newest entries first
+                    o A) All
+                    o D) Deposits
+                    o P) Payments
+                    o R) Reports
+                    """);
 
-        String choice = input.nextLine().toUpperCase();
+            String choice = input.nextLine().toUpperCase();
 
-        switch (choice) {
-            case "A":
-                listAll(transactions);
-                break;
-            case "D":
-                listDeposits(transactions);
-                break;
-            case "P":
-                listPayments(transactions);
-                break;
-            case "R":
-                listReports(transactions);
-                return;
-            default:
-                System.out.println("Invalid option. Please try again.");
+            switch (choice) {
+                case "A":
+                    listAll(transactions);
+                    break;
+                case "D":
+                    listDeposits(transactions);
+                    break;
+                case "P":
+                    listPayments(transactions);
+                    break;
+                case "R":
+                    listReports(transactions);
+                    return;
+                default:
+                    System.out.println("Invalid option. Please try again.");
 
 
+            }
+
+
+            String ledger = input.nextLine();
         }
-
-
-        String ledger = input.nextLine();
     }
-
     public static void listAll(ArrayList<Transaction> transactions) {
         System.out.println("Here you can see everything");
         System.out.println("\n====== ALL TRANSACTIONS ======\n");
@@ -253,8 +254,9 @@ public class AccountingLedgerApp {
                 break;
             case "4":
             previousYear(transactions);
+                break;
             case "5":
-
+            searchByVendor(transactions);
                 break;
             case "0":
                 return;
@@ -275,17 +277,16 @@ public class AccountingLedgerApp {
         System.out.println("\n--- MONTH TO DATE ---");
 
         for (int i = transactions.size() - 1; i >= 0; i--) {
-            Transaction t = transactions.get(i);
+            Transaction transaction = transactions.get(i);
 
-            if (t.getDate().startsWith("04/")) { // example: April
-                for (Transaction transaction : transactions) {
-                    System.out.println(
+            if (transaction.getDate().startsWith("04/")) { // example: April
+                System.out.println(
                             transaction.getDate() + " | " +
                             transaction.getTime() + " | " +
                             transaction.getDescription() + " | " +
                             transaction.getVendor() + " | " +
                             transaction.getAmount());
-                }
+
             }
         }
     }
