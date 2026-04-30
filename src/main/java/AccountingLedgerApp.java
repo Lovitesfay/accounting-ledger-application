@@ -2,8 +2,8 @@ import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Date;
-import java.util.Locale;
+import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.Scanner;
 
 public class AccountingLedgerApp {
@@ -82,18 +82,15 @@ public class AccountingLedgerApp {
     public static void addDeposit(ArrayList<Transaction> transactions)
             throws IOException {
         System.out.println("Please fill in the blank");
+        String date = LocalDate.now().toString();
+        String time = LocalTime.now().toString().substring(0, 8);
 
-        System.out.print("Enter date: ");
-        String date = input.nextLine();
-        System.out.println("Enter Time: ");
-        String time = input.nextLine();
         System.out.print("Enter Description: ");
         String describe = input.nextLine();
         System.out.println("Vendor Name: ");
         String vendor = input.nextLine();
         System.out.print("Enter amount: ");
         double amount = input.nextDouble();
-        input.nextLine();
         amount = Math.abs(amount);
         System.out.println(" ");
         Transaction transact = new Transaction(date, time, describe, vendor, amount);
@@ -109,22 +106,22 @@ public class AccountingLedgerApp {
     public static void makePayment(ArrayList<Transaction> transactions)
             throws IOException {
 
+        String date = LocalDate.now().toString();
+        String time = LocalTime.now().toString().substring(0, 8);
+
         System.out.println("Please fill in the blank");
         System.out.println(" ");
         System.out.println("[Make a Payment]");
         System.out.println(" ");
 
-        System.out.print("Enter date: ");
-        String date = input.nextLine();
-        System.out.print("Enter Time: ");
-        String time = input.nextLine();
         System.out.print("Enter Description: ");
         String describe = input.nextLine();
+
         System.out.print("Vendor Name: ");
         String vendor = input.nextLine();
+
         System.out.print("Enter amount: ");
         double amount = input.nextDouble();
-        input.nextLine();
         amount = -Math.abs(amount);
         System.out.println(" ");
         Transaction transact = new Transaction(date, time, describe, vendor, amount);
@@ -135,7 +132,7 @@ public class AccountingLedgerApp {
         System.out.println("We've received your Payment !");
     }
 
-    public static void ledgerScreen(ArrayList<Transaction> transactions) {
+    public static void ledgerScreen(ArrayList<Transaction> transactions) throws IOException {
         while (true) {
             System.out.println("""
                     Ledger - All entries should show the newest entries first
@@ -143,6 +140,7 @@ public class AccountingLedgerApp {
                     o D) Deposits
                     o P) Payments
                     o R) Reports
+                    o H) Home
                     """);
 
             String choice = input.nextLine().toUpperCase();
@@ -159,7 +157,10 @@ public class AccountingLedgerApp {
                     break;
                 case "R":
                     listReports(transactions);
-                    return;
+                    break;
+                case "H":
+                    homeScreen(transactions);
+                    break;
                 default:
                     System.out.println("Invalid option. Please try again.");
 
@@ -167,22 +168,24 @@ public class AccountingLedgerApp {
             }
 
 
-            String ledger = input.nextLine();
         }
     }
     public static void listAll(ArrayList<Transaction> transactions) {
         System.out.println("Here you can see everything");
         System.out.println("\n====== ALL TRANSACTIONS ======\n");
 
+        String date = LocalDate.now().toString();
+        String time = LocalTime.now().toString().substring(0, 8);
+
         for (int i = transactions.size() - 1; i >= 0; i--) {
-            Transaction t = transactions.get(i);
+            Transaction transaction = transactions.get(i);
 
             System.out.println(
-                    t.getDate() + " | " +
-                            t.getTime() + " | " +
-                            t.getDescription() + " | " +
-                            t.getVendor() + " | " +
-                            t.getAmount()
+                    transaction.getDate() + " | " +
+                    transaction.getTime() + " | " +
+                    transaction.getDescription() + " | " +
+                    transaction.getVendor() + " | " +
+                    transaction.getAmount()
             );
         }
     }
@@ -191,6 +194,9 @@ public class AccountingLedgerApp {
         System.out.println("List of the Deposits made");
         System.out.println(" ");
         System.out.println("\n====== DEPOSITS ======\n");
+
+        String date = LocalDate.now().toString();
+        String time = LocalTime.now().toString().substring(0, 8);
 
         for (int i = transactions.size() - 1; i >= 0; i--) {
             Transaction transaction = transactions.get(i);
@@ -210,16 +216,19 @@ public class AccountingLedgerApp {
     public static void listPayments(ArrayList<Transaction>transactions) {
         System.out.println("\n====== PAYMENTS ======\n");
 
+        String date = LocalDate.now().toString();
+        String time = LocalTime.now().toString().substring(0, 8);
+
         for (int j = transactions.size() - 1; j >= 0; j--) {
             Transaction transaction = transactions.get(j);
 
             if (transaction.getAmount() < 0) {
                 System.out.println(
                         transaction.getDate() + " | " +
-                                transaction.getTime() + " | " +
-                                transaction.getDescription() + " | " +
-                                transaction.getVendor() + " | " +
-                                transaction.getAmount()
+                        transaction.getTime() + " | " +
+                        transaction.getDescription() + " | " +
+                        transaction.getVendor() + " | " +
+                        transaction.getAmount()
                 );
             }
         }
@@ -227,59 +236,63 @@ public class AccountingLedgerApp {
     }
 
     public static void listReports(ArrayList<Transaction>transactions) {
+        while(true) {
+            System.out.println("List of the Reports");
 
-        System.out.println("List of the Reports");
+            System.out.println("""
+                    R) Reports
+                    ▪ 1) Month To Date
+                    ▪ 2) Previous Month
+                    ▪ 3) Year To Date
+                    ▪ 4) Previous Year
+                    ▪ 5) Search by Vendor
+                    ▪ 0) Back
+                    """);
 
-        System.out.println("""
-                R) Reports
-                ▪ 1) Month To Date
-                ▪ 2) Previous Month
-                ▪ 3) Year To Date
-                ▪ 4) Previous Year
-                ▪ 5) Search by Vendor
-                ▪ 0) Back
-                """);
+            String choice = input.nextLine().toUpperCase();
 
-        String choice = input.nextLine().toUpperCase();
+            switch (choice) {
+                case "1":
+                    monthToDate(transactions);
+                    break;
+                case "2":
+                    previousMonth(transactions);
+                    break;
+                case "3":
+                    yearToDate(transactions);
+                    break;
+                case "4":
+                    previousYear(transactions);
+                    break;
+                case "5":
+                    searchByVendor(transactions);
+                    break;
+                case "0":
+                    return;
+                default:
+                    System.out.println("Invalid option. Please try again.");
 
-        switch (choice) {
-            case "1":
-            monthToDate(transactions);
-                break;
-            case "2":
-            previousMonth(transactions);
-                break;
-            case "3":
-            yearToDate(transactions);
-                break;
-            case "4":
-            previousYear(transactions);
-                break;
-            case "5":
-            searchByVendor(transactions);
-                break;
-            case "0":
-                return;
-            default:
-                System.out.println("Invalid option. Please try again.");
+
+            }
 
 
         }
-
-
-
-
-
     }
 
     public static void monthToDate(ArrayList<Transaction>transactions) {
 
         System.out.println("\n--- MONTH TO DATE ---");
 
+        LocalDate today = LocalDate.now();
+
+
         for (int i = transactions.size() - 1; i >= 0; i--) {
             Transaction transaction = transactions.get(i);
 
-            if (transaction.getDate().startsWith("04/")) { // example: April
+            LocalDate date = LocalDate.parse(transaction.getDate());
+
+            if (date.getMonth() == today.getMonth() &&
+                date.getYear() == today.getYear()) { // example: April
                 System.out.println(
                             transaction.getDate() + " | " +
                             transaction.getTime() + " | " +
@@ -294,55 +307,137 @@ public class AccountingLedgerApp {
     public static void previousMonth(ArrayList<Transaction>transactions) {
         System.out.println("\n--- PREVIOUS MONTH ---");
 
-        for (Transaction transaction : transactions) {
-            System.out.println(
-                    transaction.getDate() + " | " +
-                            transaction.getTime() + " | " +
-                            transaction.getDescription() + " | " +
-                            transaction.getVendor() + " | " +
-                            transaction.getAmount());
+        LocalDate lastMonth = LocalDate.now().minusMonths(1);
+
+        for (int i = transactions.size() - 1; i >= 0; i--) {
+            Transaction t = transactions.get(i);
+
+            LocalDate date = LocalDate.parse(t.getDate());
+
+
+            if (date.getMonth() == lastMonth.getMonth() &&
+                    date.getYear() == lastMonth.getYear()) {
+
+                System.out.println(
+                        t.getDate() + " | " +
+                                t.getTime() + " | " +
+                                t.getDescription() + " | " +
+                                t.getVendor() + " | " +
+                                t.getAmount()
+                );
+            }
         }
     }
 
     public static void yearToDate(ArrayList<Transaction>transactions) {
         System.out.println("\n--- YEAR TO DATE ---");
 
-        for (Transaction transaction : transactions) {
-            System.out.println(
-                    transaction.getDate() + " | " +
-                    transaction.getTime() + " | " +
-                    transaction.getDescription() + " | " +
-                    transaction.getVendor() + " | " +
-                    transaction.getAmount());
+        int year = LocalDate.now().getYear();
+
+
+        for (int i = transactions.size() - 1; i >= 0; i--) {
+            Transaction transaction = transactions.get(i);
+
+            LocalDate date = LocalDate.parse(transaction.getDate());
+
+
+
+            if (date.getYear() == year) {
+                System.out.println
+                        (transaction.getDate() + " | " +
+                         transaction.getTime() + " | " +
+                         transaction.getDescription() + " | " +
+                         transaction.getVendor() + " | " +
+                                transaction.getAmount());
+
+            }
         }
-    }
+        }
 
     public static void previousYear(ArrayList<Transaction>transactions){
 
         System.out.println("\n--- PREVIOUS YEAR ---");
 
-        for (Transaction transaction : transactions) {
-            System.out.println(
-                    transaction.getDate() + " | " +
-                    transaction.getTime() + " | " +
-                    transaction.getDescription() + " | " +
-                    transaction.getVendor() + " | " +
-                    transaction.getAmount());
+
+        int lastYear = LocalDate.now().getYear() - 1;
+
+        for (int i = transactions.size() - 1; i >= 0; i--) {
+            Transaction transaction = transactions.get(i);
+
+            LocalDate date = LocalDate.parse(transaction.getDate());
+
+
+            if (date.getYear() == lastYear)
+
+             {
+                System.out.println
+                        (transaction.getDate() + " | " +
+                         transaction.getTime() + " | " +
+                         transaction.getDescription() + " | " +
+                         transaction.getVendor() + " | " +
+                         transaction.getAmount());
+            }
         }
     }
 
-    public static void searchByVendor(ArrayList<Transaction>transactions){
+    public static void searchByVendor(ArrayList<Transaction>transactions) {
+        System.out.print("Enter the Vendor Name: ");
+        String vendorName = input.nextLine().toLowerCase();
+        System.out.println("\n--- RESULTS ---");
 
+        boolean found = false;
+
+
+        for (int i = transactions.size() - 1; i >= 0; i--) {
+            Transaction transaction = transactions.get(i);
+
+            if (transaction.getVendor().toLowerCase().contains(vendorName)) {
+                System.out.println
+                        (transaction.getDate() + " | " +
+                                transaction.getTime() + " | " +
+                                transaction.getDescription() + " | " +
+                                transaction.getVendor() + " | " +
+                                transaction.getAmount());
+
+                found = true;
+            }
+            }
+            if (!found) {
+                System.out.println("No transactions found for vendor: " + vendorName);
+        }
     }
-
     public static void readTransaction(ArrayList<Transaction> transactions) {
+        try (Scanner fileScanner = new Scanner(
+                new java.io.File("src/main/resources/transactions.csv"))) {
 
+            while (fileScanner.hasNextLine()) {
+                String line = fileScanner.nextLine();
+                String[] parts = line.split("\\|");
+
+                if (parts.length == 5) {
+                    String date = parts[0];
+                    String time = parts[1];
+                    String description = parts[2];
+                    String vendor = parts[3];
+                    double amount = Double.parseDouble(parts[4]);
+
+                    Transaction t = new Transaction(date, time, description, vendor, amount);
+                    transactions.add(t);
+                }
+            }
+
+        } catch (Exception e) {
+            System.out.println("Error reading file: " + e.getMessage());
+        }
     }
 
     public static void writeTransaction(Transaction transaction)
             throws IOException {
         try (BufferedWriter writeBuffer = new BufferedWriter(new FileWriter
                 ("src/main/resources/transactions.csv", true))) {
+
+            String date = LocalDate.now().toString();
+            String time = LocalTime.now().toString().substring(0, 8);
 
 
             writeBuffer.write(
