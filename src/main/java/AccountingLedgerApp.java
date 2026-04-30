@@ -4,11 +4,15 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Scanner;
 
 public class AccountingLedgerApp {
 
     public static Scanner input = new Scanner(System.in);
+
+    static DateTimeFormatter formatter =
+            DateTimeFormatter.ofPattern("yyyy-MM-dd");
 
     public static void main(String[] args) throws IOException {
         ArrayList<Transaction> transactions = new ArrayList<>();
@@ -289,7 +293,7 @@ public class AccountingLedgerApp {
         for (int i = transactions.size() - 1; i >= 0; i--) {
             Transaction transaction = transactions.get(i);
 
-            LocalDate date = LocalDate.parse(transaction.getDate());
+            LocalDate date = LocalDate.parse(transaction.getDate(), formatter);
 
             if (date.getMonth() == today.getMonth() &&
                 date.getYear() == today.getYear()) { // example: April
@@ -338,7 +342,7 @@ public class AccountingLedgerApp {
         for (int i = transactions.size() - 1; i >= 0; i--) {
             Transaction transaction = transactions.get(i);
 
-            LocalDate date = LocalDate.parse(transaction.getDate());
+            LocalDate date = LocalDate.parse(transaction.getDate(), formatter);
 
 
 
@@ -364,7 +368,7 @@ public class AccountingLedgerApp {
         for (int i = transactions.size() - 1; i >= 0; i--) {
             Transaction transaction = transactions.get(i);
 
-            LocalDate date = LocalDate.parse(transaction.getDate());
+            LocalDate date = LocalDate.parse(transaction.getDate(), formatter);
 
 
             if (date.getYear() == lastYear)
@@ -421,8 +425,8 @@ public class AccountingLedgerApp {
                     String vendor = parts[3];
                     double amount = Double.parseDouble(parts[4]);
 
-                    Transaction t = new Transaction(date, time, description, vendor, amount);
-                    transactions.add(t);
+                    Transaction transaction = new Transaction(date, time, description, vendor, amount);
+                    transactions.add(transaction);
                 }
             }
 
