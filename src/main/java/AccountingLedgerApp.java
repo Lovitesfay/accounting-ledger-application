@@ -41,6 +41,7 @@ public class AccountingLedgerApp {
                         System.exit(0);
                     default:
                         System.out.println("Invalid option. Please try again.");
+                        break;
 
                 }
             }
@@ -76,7 +77,7 @@ public class AccountingLedgerApp {
                     return;
                 default:
                     System.out.println("Invalid option. Please try again.");
-
+                    break;
 
             }
 
@@ -87,7 +88,7 @@ public class AccountingLedgerApp {
             throws IOException {
         System.out.println("Please fill in the blank");
         String date = LocalDate.now().toString();
-        String time = LocalTime.now().toString().substring(0, 8);
+        String time = LocalTime.now().toString().substring(0,8 );
 
         System.out.print("Enter Description: ");
         String describe = input.nextLine();
@@ -95,6 +96,7 @@ public class AccountingLedgerApp {
         String vendor = input.nextLine();
         System.out.print("Enter amount: ");
         double amount = input.nextDouble();
+        input.nextLine();
         amount = Math.abs(amount);
         System.out.println(" ");
         Transaction transact = new Transaction(date, time, describe, vendor, amount);
@@ -126,6 +128,7 @@ public class AccountingLedgerApp {
 
         System.out.print("Enter amount: ");
         double amount = input.nextDouble();
+        input.nextLine();
         amount = -Math.abs(amount);
         System.out.println(" ");
         Transaction transact = new Transaction(date, time, describe, vendor, amount);
@@ -163,8 +166,7 @@ public class AccountingLedgerApp {
                     listReports(transactions);
                     break;
                 case "H":
-                    homeScreen(transactions);
-                    break;
+                    return;
                 default:
                     System.out.println("Invalid option. Please try again.");
 
@@ -177,9 +179,6 @@ public class AccountingLedgerApp {
     public static void listAll(ArrayList<Transaction> transactions) {
         System.out.println("Here you can see everything");
         System.out.println("\n====== ALL TRANSACTIONS ======\n");
-
-        String date = LocalDate.now().toString();
-        String time = LocalTime.now().toString().substring(0, 8);
 
         for (int i = transactions.size() - 1; i >= 0; i--) {
             Transaction transaction = transactions.get(i);
@@ -199,8 +198,6 @@ public class AccountingLedgerApp {
         System.out.println(" ");
         System.out.println("\n====== DEPOSITS ======\n");
 
-        String date = LocalDate.now().toString();
-        String time = LocalTime.now().toString().substring(0, 8);
 
         for (int i = transactions.size() - 1; i >= 0; i--) {
             Transaction transaction = transactions.get(i);
@@ -220,8 +217,7 @@ public class AccountingLedgerApp {
     public static void listPayments(ArrayList<Transaction>transactions) {
         System.out.println("\n====== PAYMENTS ======\n");
 
-        String date = LocalDate.now().toString();
-        String time = LocalTime.now().toString().substring(0, 8);
+
 
         for (int j = transactions.size() - 1; j >= 0; j--) {
             Transaction transaction = transactions.get(j);
@@ -316,8 +312,7 @@ public class AccountingLedgerApp {
         for (int i = transactions.size() - 1; i >= 0; i--) {
             Transaction t = transactions.get(i);
 
-            LocalDate date = LocalDate.parse(t.getDate());
-
+            LocalDate date = LocalDate.parse(t.getDate(), formatter);
 
             if (date.getMonth() == lastMonth.getMonth() &&
                     date.getYear() == lastMonth.getYear()) {
