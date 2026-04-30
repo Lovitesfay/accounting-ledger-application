@@ -17,15 +17,18 @@ public class AccountingLedgerApp {
     public static void main(String[] args) throws IOException {
         ArrayList<Transaction> transactions = new ArrayList<>();
         readTransaction(transactions);
+        System.out.println("DEBUG loaded: " + transactions.size());
+
         while (true) {
             {
                 System.out.print("""
                         
-                        What do you want to do?
                              1. Home
                              2. Ledger
                              0. Exit
-                         Make you selection:
+                       
+                       
+                         What do you want to do?
                         """);
 
                 String mainScreen = input.nextLine();
@@ -136,7 +139,7 @@ public class AccountingLedgerApp {
         transactions.add(transact);
         writeTransaction(transact);
 
-        System.out.println("We've received your Payment !");
+        System.out.println("We've received your Payment!");
     }
 
     public static void ledgerScreen(ArrayList<Transaction> transactions) throws IOException {
@@ -180,17 +183,10 @@ public class AccountingLedgerApp {
         System.out.println("Here you can see everything");
         System.out.println("\n====== ALL TRANSACTIONS ======\n");
 
-        for (int i = transactions.size() - 1; i >= 0; i--) {
-            Transaction transaction = transactions.get(i);
 
-            System.out.println(
-                    transaction.getDate() + " | " +
-                    transaction.getTime() + " | " +
-                    transaction.getDescription() + " | " +
-                    transaction.getVendor() + " | " +
-                    transaction.getAmount()
-            );
-        }
+
+
+
     }
 
     public static void listDeposits(ArrayList<Transaction> transactions) {
